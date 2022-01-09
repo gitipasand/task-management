@@ -21,7 +21,6 @@ class Task extends Model
 
     public function getPriority($project_id)
     {
-        $priority = Task::query()->where('project_id',$project_id)->max('priority');
-        return $priority ? $priority+1: 1;
+        return Task::query()->where('project_id',$project_id)->max('priority')+1;
     }
 }

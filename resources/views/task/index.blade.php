@@ -22,9 +22,9 @@
                         <th>Operation</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="sortable">
                     @forelse($tasks as $task)
-                    <tr>
+                    <tr class="ui-state-default">
                         <td>{{$loop->index+1}}</td>
                         <td>{{$task->project->title}}</td>
                         <td>{{$task->title}}</td>
@@ -48,4 +48,12 @@
             </div>
         </div>
     </div>
+@endsection
+@section('js')
+    @parent
+    <script>
+        $( function(){
+            $( "#sortable" ).sortable();
+        });
+    </script>
 @endsection

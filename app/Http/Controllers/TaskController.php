@@ -65,6 +65,18 @@ class TaskController extends Controller
     public function destroy(Task $task): RedirectResponse
     {
         $task->delete();
+        $this->updatePriorityTaskDeleted($task);
         return redirect()->intended($this->uri)->with('success',$this->success_message);
+    }
+
+    public function updatePriorityTaskDeleted(Task $task): void
+    {
+        $tasks = Task::query()
+            ->where('project_id', $task->project_id)
+            ->where('priority', '>', $task->priority)->get();
+
+        foreach ($tasks as $record) {
+            $record->update(['priority' => $record->priority - 1]);
+        }
     }
 }
