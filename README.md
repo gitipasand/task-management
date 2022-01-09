@@ -19,6 +19,8 @@
 
 ### commands
 
+Run `composer install`
+
 Run `php artisan migrate`
 
 Run `php artisan serve`
