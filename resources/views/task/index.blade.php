@@ -53,6 +53,7 @@
 @endsection
 @section('js')
     @parent
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script>
         $(document).ready(function(){
             const unOrderedList = $(".sortable").html();
