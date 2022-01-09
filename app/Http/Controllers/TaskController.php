@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,14 +12,16 @@ class TaskController extends Controller
 {
 
     public $task;
+    public $project;
     public $view_path;
     public $title;
     public $uri;
     public $paginate;
 
-    public function __construct(Task $task)
+    public function __construct(Task $task , Project $project )
     {
         $this->task = $task;
+        $this->project = $project;
         $this->view_path = 'task.';
         $this->uri = 'task';
         $this->paginate = 2;
@@ -28,8 +31,8 @@ class TaskController extends Controller
     public function index()
     {
         $title = $this->title[__FUNCTION__];
-        $tasks = $this->task->query()->orderBy('priority','ASC')->get();
-        return view($this->view_path.'index',compact('title','tasks'));
+        $projects = $this->project->all();
+        return view($this->view_path.'index',compact('title','projects'));
     }
 
     public function create()
@@ -77,6 +80,16 @@ class TaskController extends Controller
 
         foreach ($tasks as $record) {
             $record->update(['priority' => $record->priority - 1]);
+        }
+    }
+
+    public function sort()
+    {
+        $tasks = request('item');
+        $project = request('project');
+
+        foreach ($tasks as $key=> $record){
+            Task::query()->findOrFail($record)->update(['priority'=>$key+1]);
         }
     }
 }

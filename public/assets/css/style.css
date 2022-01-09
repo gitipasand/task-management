@@ -1,3 +1,6 @@
 .content{
     margin-top: 50px;
 }
+.ui-sortable-helper {
+    display: table;
+}

@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/get-statistics','App\Http\Controllers\HomeController@getStatistics');
 Route::post('/get-project-tasks','App\Http\Controllers\ProjectController@getProjectTasks');
+Route::post('/task/sortable','App\Http\Controllers\TaskController@sort');

@@ -19,7 +19,7 @@ class Task extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function getPriority($project_id)
+    public static function getPriority($project_id)
     {
         return Task::query()->where('project_id',$project_id)->max('priority')+1;
     }
