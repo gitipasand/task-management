@@ -27,7 +27,10 @@ Run `composer install`
 
 Run `php artisan migrate`
 
+Run `php artisan key:generate`
+
 Run `php artisan serve`
+
 
 ## License
 
