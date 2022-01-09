@@ -86,8 +86,6 @@ class TaskController extends Controller
     public function sort()
     {
         $tasks = request('item');
-        $project = request('project');
-
         foreach ($tasks as $key=> $record){
             Task::query()->findOrFail($record)->update(['priority'=>$key+1]);
         }

@@ -10,6 +10,7 @@
                 </div>
             </div>
             <div class="table-responsive">
+                <div id="result"></div>
                 <table class="table table-bordered table-striped table-hover">
                     <thead>
                     <tr>
@@ -53,45 +54,27 @@
 @section('js')
     @parent
     <script>
-        // $( function(){
-        //     $( ".sortable" ).sortable({
-        //         start: function(event, ui) {
-        //             ui.item.startPos = ui.item.index();
-        //         },
-        //         stop: function(event, ui) {
-        //             const start = ui.item.startPos;
-        //             const end = ui.item.index();
-        //             const row = ui.item.attr("id");
-        //
-        //             console.log('start',start);
-        //             console.log('end',end);
-        //             console.log('row',row);
-        //         }
-        //     });
-        // });
         $(document).ready(function(){
+            const unOrderedList = $(".sortable").html();
             $( function(){
                 $( ".sortable" ).sortable({
                     revert: 100,
                     items: 'tr.task',
                     cancel: 'thead',
-                    // stop: function(event, ui) {
-                    //     const start = ui.item.startPos;
-                    //     const end = ui.item.index();
-                    //     const row = ui.item.attr("data-id");
-                    //
-                    //     console.log('start',start);
-                    //     console.log('end',end);
-                    //     console.log('row',row);
-                    // },
                     axis: 'y',
                     update: function (event, ui) {
                         const data = $(this).sortable('serialize');
-                        const row = ui.item.attr("data-id");
                         $.ajax({
                             data: data,
                             type: 'POST',
-                            url: '{{url('api/task/sortable?project=')}}'+row
+                            url: '{{url('api/task/sortable')}}',
+                            success: function (){
+                                $('#result').html("<div class='alert alert-success'>The operation was successful</div>")
+                            },
+                            error: function (){
+                                $(".sortable").html(unOrderedList);
+                                $('#result').html("<div class='alert alert-danger'>The operation failed</div>");
+                            },
                         });
                     }
                 });
