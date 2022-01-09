@@ -28,7 +28,7 @@ class TaskController extends Controller
     public function index()
     {
         $title = $this->title[__FUNCTION__];
-        $tasks = $this->task->all();
+        $tasks = $this->task->query()->orderBy('priority','ASC')->get();
         return view($this->view_path.'index',compact('title','tasks'));
     }
 

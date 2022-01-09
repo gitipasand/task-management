@@ -17,19 +17,17 @@
                         <th>Project</th>
                         <th>Title</th>
                         <th>Description</th>
-                        <th>Priority</th>
                         <th>Status</th>
                         <th>Operation</th>
                     </tr>
                     </thead>
                     <tbody id="sortable">
                     @forelse($tasks as $task)
-                    <tr class="ui-state-default">
+                    <tr class="ui-state-default" id="{{$task->id}}">
                         <td>{{$loop->index+1}}</td>
                         <td>{{$task->project->title}}</td>
                         <td>{{$task->title}}</td>
                         <td>{{$task->description}}</td>
-                        <td>{{$task->priority}}</td>
                         <td>{{\App\Models\Task::IS_ACTIVE[$task->is_active]}}</td>
                         <td>
                             <x-html.link-component title="Edit" href="/task/{{$task->id}}/edit" style="btn btn-primary btn-sm float-start mx-1"/>
@@ -53,7 +51,20 @@
     @parent
     <script>
         $( function(){
-            $( "#sortable" ).sortable();
+            $( "#sortable" ).sortable({
+                start: function(event, ui) {
+                    ui.item.startPos = ui.item.index();
+                },
+                stop: function(event, ui) {
+                    const start = ui.item.startPos;
+                    const end = ui.item.index();
+                    const row = ui.item.attr("id");
+
+                    console.log('start',start);
+                    console.log('end',end);
+                    console.log('row',row);
+                }
+            });
         });
     </script>
 @endsection
