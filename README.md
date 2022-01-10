@@ -17,11 +17,14 @@
 ### create database
 
 - create task database -- default mysql
-- create .env file from .env.example
-- set username & password in .env file
-- delete .env.example
 
 ### commands
+
+Run `git clone git@github.com:gitipasand/task-management.git`
+
+`cd task-management`
+
+`mv .env.example .env`
 
 Run `composer install`
 
@@ -34,5 +37,5 @@ Run `php artisan serve`
 
 ## License
 
-The MIT License (MIT)
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
