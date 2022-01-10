@@ -5,23 +5,25 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TaskRequest;
 use App\Models\Project;
 use App\Models\Task;
+use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
 
     public $task;
+    public $task_service;
     public $project;
     public $view_path;
     public $title;
     public $uri;
     public $paginate;
 
-    public function __construct(Task $task , Project $project )
+    public function __construct(Task $task , Project $project , TaskService $task_service)
     {
         $this->task = $task;
         $this->project = $project;
+        $this->task_service = $task_service;
         $this->view_path = 'task.';
         $this->uri = 'task';
         $this->paginate = 2;
@@ -43,8 +45,9 @@ class TaskController extends Controller
 
     public function store(TaskRequest $request): RedirectResponse
     {
-        $request['priority'] = Task::getPriority($request->project_id);
+        $request['priority'] = $this->task_service->getPriority($request->project_id);
         $this->task->create($request->all());
+
         return redirect()->intended($this->uri)->with('success',$this->success_message);
     }
 
@@ -68,26 +71,14 @@ class TaskController extends Controller
     public function destroy(Task $task): RedirectResponse
     {
         $task->delete();
-        $this->updatePriorityTaskDeleted($task);
+        $this->task_service->updatePriorityTaskDeleted($task);
+
         return redirect()->intended($this->uri)->with('success',$this->success_message);
-    }
-
-    public function updatePriorityTaskDeleted(Task $task): void
-    {
-        $tasks = Task::query()
-            ->where('project_id', $task->project_id)
-            ->where('priority', '>', $task->priority)->get();
-
-        foreach ($tasks as $record) {
-            $record->update(['priority' => $record->priority - 1]);
-        }
     }
 
     public function sort()
     {
         $tasks = request('item');
-        foreach ($tasks as $key=> $record){
-            Task::query()->findOrFail($record)->update(['priority'=>$key+1]);
-        }
+        $this->task_service->sort($tasks);
     }
 }
