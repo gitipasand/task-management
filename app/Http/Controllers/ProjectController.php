@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
+use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Project;
@@ -15,10 +16,12 @@ class ProjectController extends Controller
     public $title;
     public $uri;
     public $paginate;
+    public $task_service;
 
-    public function __construct(Project $project)
+    public function __construct(Project $project , TaskService $task_service)
     {
         $this->project = $project;
+        $this->task_service = $task_service;
         $this->view_path = 'project.';
         $this->uri = 'project';
         $this->paginate = 2;
@@ -74,7 +77,7 @@ class ProjectController extends Controller
 
     public function getProjectTasks(Request $request)
     {
-        $tasks = Project::query()->findOrFail($request->project_id)->tasks;
+        $tasks = $this->task_service->getProjectTasks($request->project_id);
         return view('layouts.partials.tasks-list',compact('tasks'));
     }
 }

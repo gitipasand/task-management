@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Project;
 use App\Models\Task;
 
 class TaskService
@@ -27,5 +28,10 @@ class TaskService
         foreach ($tasks as $key=> $record){
             Task::query()->findOrFail($record)->update(['priority'=>$key+1]);
         }
+    }
+
+    public function getProjectTasks($project_id)
+    {
+        return Project::query()->findOrFail($project_id)->tasks;
     }
 }
