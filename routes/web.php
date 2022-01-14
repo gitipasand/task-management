@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-
-});
 Route::get('/','App\Http\Controllers\HomeController@index');
 Route::resource('/project','App\Http\Controllers\ProjectController');
 Route::resource('/task','App\Http\Controllers\TaskController');
